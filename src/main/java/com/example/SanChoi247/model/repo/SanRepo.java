@@ -87,4 +87,27 @@ public class SanRepo {
         San san = new San(san_id1, name, description, location, loaiSan, chuSan, poster, banner, chu_san_id);
         return san;
     }
+
+    public San getSanByName(String name) throws Exception {
+        Class.forName(Baseconnection.nameClass);
+        Connection con = DriverManager.getConnection(Baseconnection.url, Baseconnection.username,
+                Baseconnection.password);
+        PreparedStatement ps = con.prepareStatement("select * from san where name = ?");
+        ps.setString(1, name);
+        ps.executeQuery();
+        ResultSet rs = ps.getResultSet();
+        rs.next();
+        int san_id = rs.getInt("san_id");
+        String name1 = rs.getString("name");
+        String description = rs.getString("description");
+        String location = rs.getString("location");
+        int loai_san_id = rs.getInt("loai_san_id");
+        LoaiSan loaiSan = loaiSanRepo.getIn4LoaiSanById(loai_san_id);
+        int chu_san_id = rs.getInt("chu_san_id");
+        ChuSan chuSan = chuSanRepo.getChuSanById(chu_san_id);
+        String poster = rs.getString("poster");
+        String banner = rs.getString("banner");
+        San san = new San(san_id, name1, description, location, loaiSan, chuSan, poster, banner, chu_san_id);
+        return san;
+    }
 }
